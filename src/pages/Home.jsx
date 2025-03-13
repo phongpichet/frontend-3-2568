@@ -1,10 +1,12 @@
 import React, { useState,useEffect } from "react";
 import { Link,useNavigate } from "react-router-dom";
 
+
 const Home = () => {
     // รายการสินค้า
     const navigate = useNavigate();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+
 
     useEffect(() => {
         const user = localStorage.getItem("user");
@@ -12,6 +14,11 @@ const Home = () => {
             setIsLoggedIn(true);
         }
     }, []);
+
+    const handleAddProduct = (newProduct) => {
+        setProducts([...products, { id: products.length + 1, ...newProduct }]);
+        setShowForm(false); // ปิดฟอร์มหลังเพิ่มสินค้า
+    };
 
     const handleLogout = () => {
         localStorage.removeItem("user");
@@ -99,10 +106,17 @@ const Home = () => {
     };
 
     return (
+        
         <div className="min-h-screen bg-gray-100 p-6">
             <nav className="flex justify-between items-center bg-white p-4 shadow-md rounded-lg">
                 <h1 className="text-xl font-bold text-blue-600">ร้านสินค้ากีฬามือสอง</h1>
                 <div>
+                    {/* ถ้าล็อกอินแล้ว แสดงปุ่มเพิ่มสินค้า */}
+      {isLoggedIn && (
+        <button className="bg-blue-500 text-white px-4 py-2 rounded mt-4">
+          เพิ่มสินค้า
+        </button>
+      )}
                 {!isLoggedIn ? (
                         <>
                             <Link to="/login" className="px-4 py-2 bg-blue-500 text-white rounded-lg mr-2">Login</Link>
@@ -234,6 +248,7 @@ const Home = () => {
                 </div>
             )}
         </div>
+        
     );
 };
 
